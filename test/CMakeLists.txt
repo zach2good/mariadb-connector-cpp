@@ -1,5 +1,5 @@
 # Copyright (c) 2008, 2018, Oracle and/or its affiliates. All rights reserved.
-#               2020, 2022 MariaDB Corporation AB
+#               2020, 2023 MariaDB Corporation AB
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License, version 2.0, as
@@ -45,6 +45,15 @@ IF(WIN32)
   ADD_DEFINITIONS("-D_CRT_SECURE_NO_WARNINGS")
   ADD_DEFINITIONS("-DMARIADB_EXPORTED=__declspec(dllimport)")
 
+  TRY_COMPILE(COMPILE_OK ${CMAKE_CURRENT_BINARY_DIR}
+              SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/static_test.cpp
+              CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:STRING=${CMAKE_CURRENT_SOURCE_DIR}/include"
+              LINK_LIBRARIES ${STATIC_LIBRARY_NAME}}
+              OUTPUT_VARIABLE TRYCOMPILEOUTPUT)
+  IF(NOT COMPILE_OK)
+    MESSAGE(STATUS "${TRYCOMPILEOUTPUT}")
+    SET(STATLIB_DEPS dl openssl z)
+  ENDIF()
 ELSEIF(NOT WIN32)
   #ADD_DEFINITIONS("-DMARIADB_EXPORTED")
 
@@ -56,8 +65,9 @@ IF(CMAKE_COMPILER_IS_GNUCC AND MYSQLCPPCONN_GCOV_ENABLE)
   SET(MY_GCOV_LINK_LIBRARIES gcov)
 ENDIF(CMAKE_COMPILER_IS_GNUCC AND MYSQLCPPCONN_GCOV_ENABLE)
 
+# static_test is now linked against static driver library
 ADD_EXECUTABLE(static_test static_test.cpp)
-TARGET_LINK_LIBRARIES(static_test ${LIBRARY_NAME} ${PLATFORM_DEPENDENCIES} ${MY_GCOV_LINK_LIBRARIES})
+TARGET_LINK_LIBRARIES(static_test ${PLATFORM_DEPENDENCIES} ${STATLIB_DEPS} ${MY_GCOV_LINK_LIBRARIES} ${STATIC_LIBRARY_NAME})
 
 ADD_TEST(static_test ${EXECUTABLE_OUTPUT_PATH}/static_test)
 SET_TESTS_PROPERTIES(static_test PROPERTIES TIMEOUT 120)
