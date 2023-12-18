@@ -37,6 +37,12 @@ public:
   PreparedStatement() {}
   virtual ~PreparedStatement(){}
 
+  using Statement::execute;
+  using Statement::executeQuery;
+  using Statement::executeUpdate;
+  using Statement::executeLargeUpdate;
+  using Statement::addBatch;
+
   virtual bool execute()=0;
   virtual bool execute(const SQLString& sql)=0;
   virtual ParameterMetaData* getParameterMetaData()=0;
