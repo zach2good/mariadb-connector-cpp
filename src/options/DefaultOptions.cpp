@@ -956,8 +956,8 @@ namespace sql
                       +" must be greater or equal to "
                       + o->minValue.toString()
                       + (maxValue != INT32_MAX
-                        ?" and smaller than " + o->maxValue.toString()
-                        :" ")
+                        ? SQLString(" and smaller than ") + o->maxValue.toString()
+                        : SQLString(" "))
                       +", was \""
                       +propertyValue
                       +"\"");

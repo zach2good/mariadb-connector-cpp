@@ -56,7 +56,7 @@ namespace mariadb
     : 
       stmt(new ClientSidePreparedStatement(
       _connection,
-      "SELECT "+ _functionName +(arguments.empty() ? "()" : arguments),
+      SQLString("SELECT ") + _functionName +(arguments.empty() ? SQLString("()") : arguments),
       resultSetType,
       resultSetConcurrency, Statement::NO_GENERATED_KEYS, exptnFactory)),
       parameterMetadata(nullptr),
