@@ -562,7 +562,7 @@ ADD_LIBRARY(${LIBRARY_NAME}_obj OBJECT ${MACPP_SOURCES})
 if(MSVC)
   target_compile_options(${LIBRARY_NAME}_obj PRIVATE /W4 /WX /wd4130 /wd4458 /wd4244 /wd4456 /wd4310 /wd4702 /wd4100)
 else()
-  target_compile_options(${LIBRARY_NAME}_obj PRIVATE -Wall -Wextra -Wno-unused-parameter -Wno-sign-compare -Wno-missing-field-initializers -Wno-unused-variable -Wno-unused-but-set-variable -Wno-unknown-pragmas)
+  target_compile_options(${LIBRARY_NAME}_obj PRIVATE -Wall -Wextra -Werror -Wshift-count-overflow -Wno-unused-parameter -Wno-sign-compare -Wno-missing-field-initializers -Wno-unused-variable -Wno-unused-but-set-variable -Wno-unknown-pragmas)
 
   if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     target_compile_options(${LIBRARY_NAME}_obj PRIVATE -Wno-psabi)

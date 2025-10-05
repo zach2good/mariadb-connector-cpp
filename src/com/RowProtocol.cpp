@@ -21,6 +21,7 @@
 #include "RowProtocol.h"
 
 #include "ColumnDefinition.h"
+#include <type_traits>
 
 namespace sql
 {
@@ -250,7 +251,10 @@ namespace mariadb
         "22003",
         1264);
     }
-    T result= 0;
+    // Use a type that's at least 2 bytes to avoid shift overflow
+    using WorkingType =
+        typename std::conditional<sizeof(T) == 1, int16_t, T>::type;
+    WorkingType result = 0;
     // If we have 1 byte 0x80, or it is first of 2, 4 or 8 bytes - we should get negative number -128, and if 2 bytes 0x0080 - positive 128
     /*if (len == signDesidingByte) {
       result= *ptr++;
@@ -260,6 +264,7 @@ namespace mariadb
       result<<= 8;
       result|= (0xFF & *ptr++);
     }
+    return static_cast<T>(result);
     return result;
   }
 
