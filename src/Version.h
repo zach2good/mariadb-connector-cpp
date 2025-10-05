@@ -18,54 +18,33 @@
 *************************************************************************************/
 
 
-#include "LoggerFactory.h"
-#include "NoLogger.h"
+#ifndef _VERSION_H_
+#define _VERSION_H_
+
+#define MACPP_VERSION_MAJOR 1
+#define MACPP_VERSION_MINOR 0
+#define MACPP_VERSION_PATCH 3
+
+#define MACPP_VERSION_STR "1.0.3"
+
+#define MACPP_VERSION "1.00.0003"
+
+#define MACPP_ERR_PREFIX "[1.0.3]"
+
+#define MACPP_DEFAULT_PLUGINS_SUBDIR "plugin"
 
 namespace sql
 {
 namespace mariadb
 {
-Shared::Logger LoggerFactory::NO_LOGGER = Shared::Logger(new NoLogger());
 
-bool LoggerFactory::hasToLog = false;
-
-void LoggerFactory::init(bool mustLog) {
-  if ((hasToLog != mustLog) && mustLog) {
-    if (hasToLog != mustLog) {
-      // try
-      {
-        // Class.forName("org.slf4j.LoggerFactory");
-        hasToLog = true;
-      }
-      // catch (ClassNotFoundException classNotFound)
-      {
-        // System.out.println("Logging cannot be activated, missing slf4j
-        // dependency"); hasToLog= false;
-      }
-    }
-  }
-}
-
-  bool LoggerFactory::initLoggersIfNeeded()
-  {
-    if (!NO_LOGGER) {
-      NO_LOGGER.reset(new NoLogger());
-    }
-    return true;
-  }
-
-  Shared::Logger LoggerFactory::getLogger(const std::type_info& /*typeId*/)
-  {
-    static bool inited= initLoggersIfNeeded();
-    // Just to use inited and shut up the compiler
-    if (inited && hasToLog)
-    {
-      return NO_LOGGER;//Slf4JLogger(typeId);
-    }
-    else
-    {
-      return NO_LOGGER;
-    }
-  }
+struct Version final {
+  static const char* version;
+  static const unsigned int majorVersion= MACPP_VERSION_MAJOR;
+  static const unsigned int minorVersion= MACPP_VERSION_MINOR;
+  static const unsigned int patchVersion= MACPP_VERSION_PATCH;
+};
 }
 }
+
+#endif /* _Version_h_ */
