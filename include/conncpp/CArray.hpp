@@ -21,10 +21,11 @@
 #ifndef _CARRAY_H_
 #define _CARRAY_H_
 
-#include "buildconf.hpp"
+#include <cstdint>
 #include <initializer_list>
 #include <vector>
 
+#include "buildconf.hpp"
 
 namespace sql
 {
